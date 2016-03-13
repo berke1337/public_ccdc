@@ -1,0 +1,4 @@
+Start a shell with:
+PATH='' ./busybox32 ash
+or 
+PATH='' ./busybox64 ash
