@@ -16,7 +16,7 @@ for d in "${dirnames[@]}"; do
 		for kw in "${keywords[@]}"; do
 			echo "Grepping through for $kw"
 			printf "\n  **grep results for $kw:\n" >> $logname
-			grep -A1 -r $kw $d | sed 's/^/    /g' >> $logname
+			grep -A1 -i -r $kw $d | sed 's/^/    /g' >> $logname
 		done
 	else
 		echo "No dir found for $d" >> $logname
