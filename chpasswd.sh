@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# short url for this file: curl -L https://goo.gl/DyNqxK | bash
+# short url for this file: bash <(curl -sL https://goo.gl/DyNqxK)
 # alternative: https://t0b.pw/chpasswd.sh
 
 passfile=passwords.txt
