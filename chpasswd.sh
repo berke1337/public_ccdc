@@ -9,8 +9,8 @@ passfile_csv=passwords.csv
 list="alpha bravo charlie"
 list=`awk -F':' '{ if ( $7 !~ "nologin" && $7 !~ "false" ) print $1 }' "/etc/passwd"`
 
-echo "" > $passfile
-echo "" > $passfile_csv
+rm -f $passfile
+rm -f $passfile_csv
 
 for user in $list
   do
