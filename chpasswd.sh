@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# short url for this file: curl -L https://goo.gl/DyNqxK | bash
+# alternative: https://t0b.pw/chpasswd.sh
+
 passfile=passwords.txt
 passfile_csv=passwords.csv
 
