@@ -22,7 +22,7 @@ for user in $list
       echo ""
       if [[ $REPLY =~ ^[Yy]$ ]]
       then
-        pass=$(</dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c12; echo "")
+        pass=$(</dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c16)
         echo "$user:$pass">>$passfile
         echo "$user,$pass">>$passfile_csv
       fi
