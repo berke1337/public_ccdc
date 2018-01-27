@@ -1,0 +1,460 @@
+## Last changed: 2015-02-14 07:14:46 UTC
+version 12.3R9.4;
+system {
+    root-authentication {
+        encrypted-password "$1$KodNi7VZ$6B2Jgqc2Fcilko8gbcw0O1"; ## SECRET-DATA
+    }
+    services {
+        ssh;
+        dhcp {
+            traceoptions {
+                file dhcp_logfile;
+                level all;
+                flag all;
+            }
+        }
+    }
+    syslog {
+        user * {
+            any emergency;
+        }
+        file messages {
+            any notice;
+            authorization info;
+        }
+        file interactive-commands {
+            interactive-commands any;
+        }
+    }
+}
+interfaces {
+    ge-0/0/0 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1000;
+                }
+            }
+        }
+    }
+    ge-0/0/1 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1001;
+                }
+            }
+        }
+    }
+    ge-0/0/2 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1002;
+                }
+            }
+        }
+    }
+    ge-0/0/3 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1003;
+                }
+            }
+        }
+    }
+    ge-0/0/4 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1004;
+                }
+            }
+        }
+    }
+    ge-0/0/5 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1005;
+                }
+            }
+        }
+    }
+    ge-0/0/6 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1006;
+                }
+            }
+        }
+    }
+    ge-0/0/7 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1007;
+                }
+            }
+        }
+    }
+    ge-0/0/8 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1008;
+                }
+            }
+        }
+    }
+    ge-0/0/9 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1009;
+                }
+            }
+        }
+    }
+    ge-0/0/10 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1010;
+                }
+            }
+        }
+    }
+    ge-0/0/11 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1011;
+                }
+            }
+        }
+    }
+    ge-0/0/12 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1012;
+                }
+            }
+        }
+    }
+    ge-0/0/13 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1013;
+                }
+            }
+        }
+    }
+    ge-0/0/14 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode trunk;
+                vlan {
+                    members [ 100 1000-1013 1015-1022 ];
+                }
+                native-vlan-id 1014;
+            }
+        }
+    }
+    ge-0/0/15 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1015;
+                }
+            }
+        }
+    }
+    ge-0/0/16 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1016;
+                }
+            }
+        }
+    }
+    ge-0/0/17 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1017;
+                }
+            }
+        }
+    }
+    ge-0/0/18 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1018;
+                }
+            }
+        }
+    }
+    ge-0/0/19 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1019;
+                }
+            }
+        }
+    }
+    ge-0/0/20 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1020;
+                }
+            }
+        }
+    }
+    ge-0/0/21 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1021;
+                }
+            }
+        }
+    }
+    ge-0/0/22 {
+        unit 0 {
+            family ethernet-switching {
+                port-mode access;
+                vlan {
+                    members v1022;
+                }
+            }
+        }
+    }
+    ge-0/0/23 {
+        hold-time up 0 down 2000;
+        unit 0 {
+            family ethernet-switching;
+        }
+    }
+    ge-0/1/0 {
+        unit 0 {
+            family ethernet-switching;
+        }
+    }
+    ge-0/1/1 {
+        unit 0 {
+            family ethernet-switching;
+        }
+    }
+    ge-0/1/2 {
+        unit 0 {
+            family ethernet-switching;
+        }
+    }
+    ge-0/1/3 {
+        unit 0 {
+            family ethernet-switching;
+        }
+    }
+    vlan {
+        unit 100 {
+            family inet {
+                address 10.70.70.77/24;
+            }
+        }
+    }
+}
+protocols {
+    igmp-snooping {
+        vlan all;
+    }
+}
+ethernet-switching-options {
+    analyzer span-port {
+        input {
+            ingress {
+                interface ge-0/0/0.0;
+                interface ge-0/0/1.0;
+                interface ge-0/0/2.0;
+                interface ge-0/0/3.0;
+                interface ge-0/0/4.0;
+                interface ge-0/0/5.0;
+                interface ge-0/0/6.0;
+                interface ge-0/0/7.0;
+                interface ge-0/0/8.0;
+                interface ge-0/0/9.0;
+                interface ge-0/0/11.0;
+                interface ge-0/0/12.0;
+                interface ge-0/0/13.0;
+                interface ge-0/0/14.0;
+                interface ge-0/0/15.0;
+                interface ge-0/0/16.0;
+                interface ge-0/0/17.0;
+                interface ge-0/0/18.0;
+                interface ge-0/0/19.0;
+                interface ge-0/0/20.0;
+                interface ge-0/0/21.0;
+                interface ge-0/0/22.0;
+            }
+        }
+        output {
+            interface {
+                ge-0/0/23.0;
+            }
+        }
+    }
+    secure-access-port {
+        interface ge-0/0/1.0 {
+            allowed-mac 2c:21:72:a5:0c:4a;
+        }
+        interface ge-0/0/2.0 {
+            allowed-mac 00:e0:4c:68:25:82;
+        }
+        interface ge-0/0/4.0 {
+            allowed-mac 00:1a:a0:fc:7e:63;
+        }
+        interface ge-0/0/6.0 {
+            allowed-mac [ 00:0c:29:30:56:96 00:0c:29:88:7d:72 00:0c:29:d0:71:f7 34:e6:d7:4f:7d:58 ];
+        }
+        interface ge-0/0/8.0 {
+            allowed-mac 00:23:ae:31:ec:0f;
+        }
+        interface ge-0/0/10.0 {
+            allowed-mac d0:67:e5:e9:af:db;
+        }
+        interface ge-0/0/12.0 {
+            allowed-mac 00:23:ae:31:f7:be;
+        }
+        interface ge-0/0/15.0 {
+            allowed-mac d4:ae:52:c7:fe:44;
+        }
+        interface ge-0/0/16.0 {
+            allowed-mac 5c:26:0a:63:30:1f;
+        }
+        interface ge-0/0/17.0 {
+            allowed-mac d0:67:e5:f1:00:7c;
+        }
+        interface ge-0/0/18.0 {
+            allowed-mac d4:be:d9:62:64:7f;
+        }
+        interface ge-0/0/19.0 {
+            allowed-mac 00:23:ae:37:4e:01;
+        }
+        interface ge-0/0/20.0 {
+            allowed-mac 90:a7:d7:5d:85:5c;
+        }
+        interface ge-0/0/22.0 {
+            allowed-mac 00:1a:a2:19:84:32;
+        }
+    }
+    storm-control {
+        interface all;
+    }
+}
+vlans {
+    v100 {
+        vlan-id 100;
+        l3-interface vlan.100;
+    }
+    v1000 {
+        vlan-id 1000;
+    }
+    v1001 {
+        vlan-id 1001;
+    }
+    v1002 {
+        vlan-id 1002;
+    }
+    v1003 {
+        vlan-id 1003;
+    }
+    v1004 {
+        vlan-id 1004;
+    }
+    v1005 {
+        vlan-id 1005;
+    }
+    v1006 {
+        vlan-id 1006;
+    }
+    v1007 {
+        vlan-id 1007;
+    }
+    v1008 {
+        vlan-id 1008;
+    }
+    v1009 {
+        vlan-id 1009;
+    }
+    v1010 {
+        vlan-id 1010;
+    }
+    v1011 {
+        vlan-id 1011;
+    }
+    v1012 {
+        vlan-id 1012;
+    }
+    v1013 {
+        vlan-id 1013;
+    }
+    v1014 {
+        vlan-id 1014;
+    }
+    v1015 {
+        vlan-id 1015;
+    }
+    v1016 {
+        vlan-id 1016;
+    }
+    v1017 {
+        vlan-id 1017;
+    }
+    v1018 {
+        vlan-id 1018;
+    }
+    v1019 {
+        vlan-id 1019;
+    }
+    v1020 {
+        vlan-id 1020;
+    }
+    v1021 {
+        vlan-id 1021;
+    }
+    v1022 {
+        vlan-id 1022;
+    }
+}
+poe {
+    interface all;
+}

@@ -1,0 +1,64 @@
+# -------------------------------------
+# INGRESS
+# -------------------------------------
+
+# Example verbatim rule
+#term base-allow-lo0-out {
+#  comment:: "Allow all loopback communications"
+#  verbatim::  iptables "-A OUTPUT -o lo -j ACCEPT"
+#}
+
+header {
+  comment:: "ingress firewall"
+  target:: speedway FORWARD DROP inet
+}
+
+term permit-icmp {
+  comment:: "allow ICMP everywhere"
+  protocol::icmp
+  action:: accept
+}
+
+term permit-established {
+  option:: established
+  action:: accept
+}
+
+term permit-mail {
+  comment:: "Exchange"
+  destination-address:: BELLE
+  protocol:: tcp
+  destination-port:: SMTP POP3 HTTPS
+  action:: accept
+}
+
+term permit-web {
+  destination-address:: ARIEL ELSA
+  protocol:: tcp
+  destination-port:: HTTP
+  action:: accept
+}
+
+term permit-dns {
+  destination-address:: CINDERELLA SNOWWHITE
+  destination-port:: DNS
+  protocol:: udp
+  action:: accept
+}
+
+
+# -------------------------------------
+# RELAY
+# -------------------------------------
+
+header {
+  comment:: "egress firewall"
+  target:: speedway FORWARD DROP inet
+}
+
+# TODO: lock down
+term permit-pod-to-pod {
+  source-address:: POD
+#  destination-address:: POD
+  action:: accept
+}

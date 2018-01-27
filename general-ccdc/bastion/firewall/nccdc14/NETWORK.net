@@ -1,0 +1,181 @@
+# ----------------------------------------------------------------------------
+#                                    Hosts
+# ----------------------------------------------------------------------------
+#
+# We use the following format for host definitions:
+#
+#   HOSTNAME = IP # dns-label-1, ...: OS - service-1, ...
+#
+
+# TODO: replace <66> with our team number plus a zero, e.g., <20> for Team #2.
+
+# Unkown IP address
+XXX =                   0.0.0.0/32
+
+# Networking Gear
+SWITCH = XXX # - Switch: Juniper EX2200
+ROUTER = XXX # - Router: Juniper SRX210 
+# - Wifi:   Juniper WLC2
+# - Wifi:   Juniper WLA522
+
+
+# Servers
+CORTANA =               10.66.66.4/32   # dns: Windows 2012 - DNS
+FAITH =                 10.66.66.10/32  # mail, blog: Fedora - Mail, POP3, HTTP
+ELLIE =                 10.66.66.20/32  # store: Windows 2008 - IIS
+DESMOND =               10.66.66.21/32  # sql: BSD - MySQL, SSH
+ESXI =                  10.66.66.30/32  # n/a: ESXi
+PHONE =                 10.66.66.252/32 # n/a: Cisco IP phone
+
+# Workstations / Laptops
+PEACH =                 XXX        # n/a: Windows 7 x86
+ZELDA =                 XXX        # n/a: Windows XP SP3
+YOSHI =                 XXX        # n/a: Windows 8
+GORDON =                XXX        # n/a: NO OS
+TOAD =                  XXX        # n/a: Windows XP SP2
+
+# Internal Cloud
+VM_GUIDANCE =           10.66.66.201/32 # n/a: n/a
+VM_IDM =                10.66.66.202/32 # n/a: n/a
+VM_OPENBUILD =          10.66.66.204/32 # n/a: n/a
+
+# External Cloud
+VM_DNS =                172.16.66.201/32 # n/a: NetBSD
+VM_MINECRAFT =          172.16.66.202/32 # n/a: Ubuntu
+VM_UNREAL_TOURNAMENT =  172.16.66.203/32 # n/a: Mandriva
+VM_TICKET_SYSTEM =      172.16.66.204/32 # n/a: Debian
+VM_MEDAL_OF_HONOR =     172.16.66.210/32 # n/a: Windows XP
+VM_QUAKE2 =             172.16.66.211/32 # n/a: Windows Vista
+VM_VENTRILO =           172.16.66.212/32 # n/a: Solaris
+VM_TEAMSPEAK2 =         172.16.66.213/32 # n/a: Windows 2003
+VM_SPLUNK =             172.16.66.220/32 # n/a: ?
+
+# Devises
+NEXUS =                 XXX
+GALAXY =                XXX
+
+# Competition Infrastructure
+TEAM_PORTAL_SERVER =    10.120.0.5/32
+SOFTWARE_SERVER =       10.120.0.9/32 # Software/patch server
+NTP_SERVER =            10.120.0.10/32
+VOIP_SERVER =           10.120.0.100/32
+INTERNET_PROXY =        10.120.0.200/32
+PRINTER1 =              10.110.0.200/32 # Printer 1: 2300dn
+PRINTER2 =              10.110.0.201/32 # Printer 2: 2300dn
+PRINTER3 =              10.110.0.202/32 # Printer 3: 2300dn
+
+# ----------------------------------------------------------------------------
+#                                   Groups
+# ----------------------------------------------------------------------------
+
+COMP_SERVERS =          TEAM_PORTAL_SERVER
+                        SOFTWARE_SERVER
+                        NTP_SERVER
+                        VOIP_SERVER
+                        INTERNET_PROXY
+                        PRINTER1
+                        PRINTER2
+                        PRINTER3
+
+INTERNAL_CLOUD =        VM_GUIDANCE
+                        VM_IDM
+                        VM_OPENBUILD
+
+EXTERNAL_CLOUD =        VM_DNS
+                        VM_MINECRAFT
+                        VM_UNREAL_TOURNAMENT
+                        VM_TICKET_SYSTEM
+                        VM_MEDAL_OF_HONOR
+                        VM_QUAKE2
+                        VM_VENTRILO
+                        VM_TEAMSPEAK2
+                        VM_SPLUNK
+
+# ----------------------------------------------------------------------------
+#                                   Subnets
+# ----------------------------------------------------------------------------
+
+COMP_NET =              10.110.0.0/16
+                        10.120.0.0/16 
+
+DEFAULT_ROUTE_CORE =    10.66.66.1/32
+DEFAULT_ROUTE_VIRTUAL = 172.16.66.1/32
+
+INTERNAL_CLOUD_NET =    10.66.66.200/27   # 10.66.66.200-225
+EXTERNAL_CLOUD_NET =    172.16.66.200/27  # 172.16.66.200-225
+
+INTERNAL_NET =          10.66.66.0/24
+EXTERNAL_NET =          176.16.66.0/24
+
+POD =                   INTERNAL_NET
+                        EXTERNAL_NET
+
+# ----------------------------------------------------------------------------
+#                                  Defaults
+# ----------------------------------------------------------------------------
+
+RFC1918 = 10.0.0.0/8      # non-public
+          172.16.0.0/12   # non-public
+          192.168.0.0/16  # non-public
+
+INTERNAL = RFC1918
+
+LOOPBACK = 127.0.0.0/8  # loopback
+           ::1/128       # ipv6 loopback
+
+RFC_3330 = 169.254.0.0/16  # special use IPv4 addresses - netdeploy
+
+LINKLOCAL = FE80::/10  # IPv6 link-local
+
+SITELOCAL = FEC0::/10    # Ipv6 Site-local
+
+MULTICAST = 224.0.0.0/4  # IP multicast
+            FF00::/8     # IPv6 multicast
+
+CLASS-E   = 240.0.0.0/4
+
+RESERVED = 0.0.0.0/8           # reserved
+           RFC1918
+           LOOPBACK
+           RFC_3330
+           MULTICAST
+           CLASS-E
+           0000::/8            # reserved by IETF
+           0100::/8            # reserved by IETF
+           0200::/7            # reserved by IETF
+           0400::/6            # reserved by IETF
+           0800::/5            # reserved by IETF
+           1000::/4            # reserved by IETF
+           4000::/3            # reserved by IETF
+           6000::/3            # reserved by IETF
+           8000::/3            # reserved by IETF
+           A000::/3            # reserved by IETF
+           C000::/3            # reserved by IETF
+           E000::/4            # reserved by IETF
+           F000::/5            # reserved by IETF
+           F800::/6            # reserved by IETF
+           FC00::/7            # unique local unicast
+           FE00::/9            # reserved by IETF
+           LINKLOCAL           # link local unicast
+           SITELOCAL           # IPv6 site-local
+
+# http://www.team-cymru.org/Services/Bogons/bogon-bn-agg.txt
+# 22-Apr-2011
+BOGON = 0.0.0.0/8
+        192.0.0.0/24
+        192.0.2.0/24
+        192.18.0.0/15
+        198.51.100.0/24
+        203.0.113.0/24
+        MULTICAST
+        CLASS-E
+        3FFE::/16      # 6bone
+        5F00::/8       # 6bone
+        2001:DB8::/32  # IPv6 documentation prefix
+
+GOOGLE_PUBLIC_DNS_ANYCAST = 8.8.4.4/32               # IPv4 Anycast
+                            8.8.8.8/32               # IPv4 Anycast
+                            2001:4860:4860::8844/128 # IPv6 Anycast
+                            2001:4860:4860::8888/128 # IPv6 Anycast
+
+GOOGLE_DNS = GOOGLE_PUBLIC_DNS_ANYCAST

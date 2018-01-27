@@ -1,0 +1,7 @@
+deploy.sh
+
+  Copies over the generated HTML to the web server
+
+top5.sh
+
+  Generates the HTML report from Bro logs

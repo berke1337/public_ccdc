@@ -1,0 +1,111 @@
+header {
+  target:: srx from-zone Internal to-zone Internet
+}
+
+# Allow every box except ARP spoofer.
+term default-allow {
+  source-address:: CONTROL
+  action:: accept
+}
+
+header {
+  target:: srx from-zone Internet to-zone Internal
+}
+
+term allow-icmp {
+  protocol:: icmp
+  action:: accept
+}
+
+term allow-ssh-srx {
+  destination-address:: SRX
+  destination-port:: SSH
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-ssh-corporate {
+  source-address:: CORPORATE
+  destination-port:: SSH
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-rdp-public {
+  destination-address:: HMI HMI_WRKS 
+  destination-port:: RDP
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-rdp-corporate {
+  source-address:: CORPORATE
+  destination-address:: HISTORIAN OPC ENGINEER_WRKS
+  destination-port:: RDP
+  protocol:: tcp
+  action:: accept
+}
+
+term rem-ssh {
+  destination-address:: OPC ENGINEER_WRKS
+  destination-port:: SSH
+  protocol:: tcp
+  action:: accept
+}
+
+term rem-ftp {
+  destination-address:: HISTORIAN
+  destination-port:: FTP_CTRL FTP_DATA FTP_PASV
+  protocol:: tcp
+  action:: accept
+}
+
+term rem-http {
+  destination-address:: NMIS
+  destination-port:: HTTP
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-splunk {
+  comment:: "Splunk inject"
+  source-address:: SPLUNK_SERVER
+  destination-address:: OPC HMI
+  destination-port:: SPLUNK
+  protocol:: tcp
+  action:: accept
+}
+
+header {
+  target:: srx from-zone Internal to-zone Plant
+}
+
+term allow-icmp {
+  protocol:: icmp
+  action:: accept
+}
+
+term allow-plc-in {
+  source-address:: OPC
+  destination-address:: PLANT
+  destination-port:: SSH SCADA
+  protocol:: tcp
+  action:: accept
+}
+
+header {
+  target:: srx from-zone Plant to-zone Internal
+}
+
+term allow-icmp {
+  protocol:: icmp
+  action:: accept
+}
+
+term allow-plc-out {
+  source-address:: PLANT
+  destination-address:: OPC
+  destination-port:: SCADA
+  protocol:: tcp
+  action:: accept
+}

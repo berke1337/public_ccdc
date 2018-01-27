@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config version="7.0.0" urldb="paloaltonetworks">
+  <devices>
+    <entry name="localhost.localdomain">
+      <vsys>
+        <entry name="vsys1">
+          <application/>
+          <application-group/>
+          <service>
+            <entry name="service-http-ssh">
+              <protocol>
+                <tcp>
+                  <port>22,80</port>
+                </tcp>
+              </protocol>
+            </entry>
+          </service>
+          <service-group/>
+          <schedule/>
+          <rulebase>
+            <security>
+              <rules>
+                <entry name="Basic-Allowed-Apps">
+                  <to>
+                    <member>Untrust-L3</member>
+                  </to>
+                  <from>
+                    <member>Trust-L3</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <hip-profiles>
+                    <member>any</member>
+                  </hip-profiles>
+                  <action>allow</action>
+                  <application>
+                    <member>any</member>
+                  </application>
+                </entry>
+              </rules>
+            </security>
+          </rulebase>
+        </entry>
+      </vsys>
+    </entry>
+  </devices>
+</config>

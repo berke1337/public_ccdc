@@ -1,0 +1,793 @@
+## Last changed: 2015-04-25 22:03:23 UTC
+version 12.1X44-D45.2;
+system {
+    host-name Team7Remote;
+    time-zone Americas/Chicago;
+    root-authentication {
+        encrypted-password "$1$4d0Ly4sP$ZBrsXkC0UQygWn3jfM3ai."; ## SECRET-DATA
+    }
+    name-server {
+        10.70.70.5;
+        8.8.4.4;
+        208.67.222.222;
+        208.67.220.220;
+    }
+    services {
+        ssh;
+        dhcp {
+            pool 172.16.200.0/24 {
+                address-range low 172.16.200.11 high 172.16.200.22;
+                router {
+                    172.16.200.1;
+                }
+            }
+        }
+    }
+    syslog {
+        archive size 100k files 3;
+        user * {
+            any emergency;
+        }
+        file messages {
+            any critical;
+            authorization info;
+        }
+        file interactive-commands {
+            interactive-commands error;
+        }
+    }
+    max-configurations-on-flash 5;
+    max-configuration-rollbacks 5;
+    license {
+        autoupdate {
+            url https://ae1.juniper.net/junos/key_retrieval;
+        }
+    }
+}
+interfaces {
+    ge-0/0/0 {
+        unit 0 {
+            family inet {
+                filter {
+                    input PCAP;
+                    output PCAP;
+                }
+                address 172.16.70.2/24;
+            }
+        }
+    }
+    ge-0/0/4 {
+        unit 0 {
+            family ethernet-switching {
+                vlan {
+                    members vlan1;
+                }
+            }
+        }
+    }
+    ge-0/0/5 {
+        unit 0 {
+            family ethernet-switching {
+                vlan {
+                    members vlan1;
+                }
+            }
+        }
+    }
+    ge-0/0/6 {
+        unit 0 {
+            family ethernet-switching {
+                vlan {
+                    members vlan1;
+                }
+            }
+        }
+    }
+    ge-0/0/11 {
+        unit 0 {
+            family ethernet-switching {
+                vlan {
+                    members vlan0;
+                }
+            }
+        }
+    }
+    vlan {
+        unit 0 {
+            family inet {
+                address 172.16.200.1/24 {
+                    arp 172.16.200.203 mac 00:50:56:99:e6:d8;
+                    arp 172.16.200.202 mac 00:50:56:99:70:7b;
+                    arp 172.16.200.204 mac 00:50:56:99:32:e5;
+                    arp 172.16.200.211 mac 00:50:56:99:3d:63;
+                    arp 172.16.200.210 mac 00:50:56:99:38:a4;
+                    arp 172.16.200.205 mac 00:50:56:99:a3:12;
+                    arp 172.16.200.253 mac 00:50:56:99:cd:a8;
+                }
+            }
+        }
+        unit 1 {
+            family inet {
+                address 172.16.201.1/24;
+            }
+        }
+    }
+}
+forwarding-options {
+    packet-capture {
+        file filename pcap;
+        maximum-capture-size 1500;
+    }
+}
+routing-options {
+    static {
+        route 0.0.0.0/0 next-hop 172.16.70.1;
+    }
+}
+protocols {
+    stp;
+}
+security {
+    screen {
+        ids-option untrust-screen {
+            icmp {
+                fragment;
+                large;
+                flood threshold 500;
+                ping-death;
+            }
+            ip {
+                bad-option;
+                spoofing;
+                source-route-option;
+                unknown-protocol;
+                block-frag;
+                tear-drop;
+            }
+            tcp {
+                syn-fin;
+                syn-flood {
+                    alarm-threshold 1024;
+                    attack-threshold 200;
+                    source-threshold 1024;
+                    destination-threshold 2048;
+                    timeout 20;
+                }
+                land;
+            }
+            udp {
+                flood threshold 500;
+            }
+        }
+    }
+    nat {
+        source {
+            rule-set PlantNat {
+                from zone Plant;
+                to zone Internet;
+                rule PlantNat {
+                    match {
+                        source-address 172.16.201.0/24;
+                        destination-address 0.0.0.0/0;
+                    }
+                    then {
+                        source-nat {
+                            interface;
+                        }
+                    }
+                }
+            }
+        }
+        static {
+            rule-set NatControl {
+                from zone Internet;
+                rule 202_nat {
+                    match {
+                        destination-address 172.16.70.202/32;
+                    }
+                    then {
+                        static-nat {
+                            prefix {
+                                172.16.200.202/32;
+                            }
+                        }
+                    }
+                }
+                rule 203_nat {
+                    match {
+                        destination-address 172.16.70.203/32;
+                    }
+                    then {
+                        static-nat {
+                            prefix {
+                                172.16.200.203/32;
+                            }
+                        }
+                    }
+                }
+                rule 204_nat {
+                    match {
+                        destination-address 172.16.70.204/32;
+                    }
+                    then {
+                        static-nat {
+                            prefix {
+                                172.16.200.204/32;
+                            }
+                        }
+                    }
+                }
+                rule 205_nat {
+                    match {
+                        destination-address 172.16.70.205/32;
+                    }
+                    then {
+                        static-nat {
+                            prefix {
+                                172.16.200.205/32;
+                            }
+                        }
+                    }
+                }
+                rule 210_nat {
+                    match {
+                        destination-address 172.16.70.210/32;
+                    }
+                    then {
+                        static-nat {
+                            prefix {
+                                172.16.200.210/32;
+                            }
+                        }
+                    }
+                }
+                rule 211_nat {
+                    match {
+                        destination-address 172.16.70.211/32;
+                    }
+                    then {
+                        static-nat {
+                            prefix {
+                                172.16.200.211/32;
+                            }
+                        }
+                    }
+                }
+                rule 253_nat {
+                    match {
+                        destination-address 172.16.70.253/32;
+                    }
+                    then {
+                        static-nat {
+                            prefix {
+                                172.16.200.253/32;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        proxy-arp {
+            interface ge-0/0/0.0 {
+                address {
+                    172.16.70.3/32 to 172.16.70.254/32;
+                }
+            }
+        }
+    }
+    policies {
+        /*
+        $Id: /fw/nccdc15-control.srx $
+        $Date: 2015/04/25 $
+         */
+        from-zone Internal to-zone Internet {
+            policy default-allow {
+                match {
+                    source-address [ CONTROL ENGINEER_WRKS HMI OPC ];
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+        /*
+        $Id: /fw/nccdc15-control.srx $
+        $Date: 2015/04/25 $
+         */
+        from-zone Internet to-zone Internal {
+            policy allow-icmp {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application allow-icmp-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy rem-ssh {
+                match {
+                    source-address any;
+                    destination-address [ ENGINEER_WRKS OPC ];
+                    application rem-ssh-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy rem-ftp {
+                match {
+                    source-address any;
+                    destination-address HISTORIAN;
+                    application rem-ftp-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy rem-http {
+                match {
+                    source-address any;
+                    destination-address NMIS;
+                    application rem-http-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy allow-ssh-srx {
+                match {
+                    source-address any;
+                    destination-address SRX;
+                    application allow-ssh-srx-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy allow-ssh-corporate {
+                match {
+                    source-address [ BRUCE CANARY CORPORATE HELLFIRE MONGER ];
+                    destination-address any;
+                    application allow-ssh-corporate-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            /*
+            Splunk inject
+             */
+            policy allow-splunk {
+                match {
+                    source-address SPLUNK_SERVER;
+                    destination-address [ HMI OPC ];
+                    application allow-splunk-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy allow-rdp-public {
+                match {
+                    source-address any;
+                    destination-address [ HMI HMI_WRKS ];
+                    application allow-rdp-public-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy allow-rdp-corporate {
+                match {
+                    source-address [ BRUCE CANARY CORPORATE HELLFIRE MONGER ];
+                    destination-address [ ENGINEER_WRKS HISTORIAN OPC ];
+                    application allow-rdp-corporate-app;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+        from-zone Internal to-zone Internal {
+            policy intoin {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+        from-zone Internet to-zone Internet {
+            policy Open {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+        from-zone Plant to-zone Internet {
+            policy No_Plant_Internet {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    deny;
+                }
+            }
+        }
+        from-zone Internet to-zone Plant {
+            policy No_Internet_Plant {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    deny;
+                }
+            }
+        }
+        from-zone Plant to-zone Internal {
+            policy allow-plc-out {
+                match {
+                    source-address [ PLANT PLC240 ];
+                    destination-address OPC;
+                    application allow-plc-out-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy allow-icmp {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application allow-icmp-app;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+        from-zone Internal to-zone Plant {
+            policy allow-plc-in {
+                match {
+                    source-address OPC;
+                    destination-address [ PLANT PLC240 ];
+                    application allow-plc-in-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy allow-icmp {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application allow-icmp-app;
+                }
+                then {
+                    permit;
+                }
+            }
+        }
+    }
+    zones {
+        security-zone Internal {
+            address-book {
+                address SRX_0 172.16.70.1/32;
+                address SRX_1 172.16.70.2/32;
+                address OPC_0 172.16.70.204/31;
+                address ENGINEER_WRKS_0 172.16.70.210/31;
+                address HISTORIAN_0 172.16.70.203/32;
+                address NMIS_0 172.16.70.211/32;
+                address HMI_0 172.16.70.202/31;
+                address OPC_1 172.16.200.204/31;
+                address HMI_1 172.16.200.202/31;
+                address OPC_2 172.16.70.204/32;
+                address OPC_3 172.16.200.204/32;
+                address ENGINEER_WRKS_1 172.16.200.210/31;
+                address HISTORIAN_1 172.16.200.203/32;
+                address NMIS_1 172.16.200.211/32;
+                address HMI_2 172.16.70.202/32;
+                address HMI_3 172.16.200.202/32;
+                address HMI_WRKS_0 172.16.70.205/32;
+                address HMI_WRKS_1 172.16.200.205/32;
+                address ENGINEER_WRKS_2 172.16.70.210/32;
+                address ENGINEER_WRKS_3 172.16.200.210/32;
+                address CONTROL_0 172.16.70.253/32;
+                address CONTROL_1 172.16.200.253/32;
+                address-set SRX {
+                    address SRX_0;
+                    address SRX_1;
+                }
+                address-set OPC {
+                    address OPC_0;
+                    address OPC_1;
+                    address OPC_2;
+                    address OPC_3;
+                }
+                address-set ENGINEER_WRKS {
+                    address ENGINEER_WRKS_0;
+                    address ENGINEER_WRKS_1;
+                    address ENGINEER_WRKS_2;
+                    address ENGINEER_WRKS_3;
+                }
+                address-set HISTORIAN {
+                    address HISTORIAN_0;
+                    address HISTORIAN_1;
+                }
+                address-set NMIS {
+                    address NMIS_0;
+                    address NMIS_1;
+                }
+                address-set HMI {
+                    address HMI_0;
+                    address HMI_1;
+                    address HMI_2;
+                    address HMI_3;
+                }
+                address-set HMI_WRKS {
+                    address HMI_WRKS_0;
+                    address HMI_WRKS_1;
+                }
+                address-set CONTROL {
+                    address CONTROL_0;
+                    address CONTROL_1;
+                }
+            }
+            host-inbound-traffic {
+                system-services {
+                    all;
+                }
+                protocols {
+                    all;
+                }
+            }
+            interfaces {
+                vlan.0 {
+                    host-inbound-traffic {
+                        system-services {
+                            all;
+                        }
+                        protocols {
+                            all;
+                        }
+                    }
+                }
+            }
+        }
+        security-zone Internet {
+            address-book {
+                address 10_5 172.16.200.5/32;
+                address CORPORATE_0 10.70.70.5/32;
+                address CORPORATE_1 10.70.70.10/32;
+                address CORPORATE_2 10.70.70.15/32;
+                address CORPORATE_3 10.70.70.77/32;
+                address CORPORATE_4 10.70.70.78/32;
+                address CORPORATE_5 10.70.70.109/32;
+                address HELLFIRE_0 10.70.70.20/31;
+                address BRUCE_0 10.70.70.104/30;
+                address MONGER_0 10.70.70.200/31;
+                address CANARY_0 10.70.70.250/31;
+                address CORPORATE_6 10.70.70.110/32;
+                address CORPORATE_7 10.70.70.202/32;
+                address SPLUNK_SERVER_0 192.168.7.70/32;
+                address CORPORATE_8 10.70.70.205/32;
+                address CORPORATE_9 10.70.70.252/32;
+                address-set CORPORATE {
+                    address CORPORATE_0;
+                    address CORPORATE_1;
+                    address CORPORATE_2;
+                    address CORPORATE_3;
+                    address CORPORATE_4;
+                    address CORPORATE_5;
+                    address CORPORATE_6;
+                    address CORPORATE_7;
+                    address CORPORATE_8;
+                    address CORPORATE_9;
+                }
+                address-set HELLFIRE {
+                    address HELLFIRE_0;
+                }
+                address-set BRUCE {
+                    address BRUCE_0;
+                }
+                address-set MONGER {
+                    address MONGER_0;
+                }
+                address-set CANARY {
+                    address CANARY_0;
+                }
+                address-set SPLUNK_SERVER {
+                    address SPLUNK_SERVER_0;
+                }
+            }
+            screen untrust-screen;
+            host-inbound-traffic {
+                system-services {
+                    all;
+                }
+                protocols {
+                    all;
+                }
+            }
+            interfaces {
+                ge-0/0/0.0 {
+                    host-inbound-traffic {
+                        system-services {
+                            ping;
+                            ssh;
+                        }
+                    }
+                }
+            }
+        }
+        security-zone Plant {
+            address-book {
+                address PLC240_0 172.16.201.240/31;
+                address PLANT_0 172.16.201.242/32;
+                address-set PLC240 {
+                    address PLC240_0;
+                }
+                address-set PLANT {
+                    address PLANT_0;
+                }
+            }
+            interfaces {
+                vlan.1;
+            }
+        }
+    }
+}
+firewall {
+    filter PCAP {
+        term no-natasha {
+            from {
+                source-address {
+                    10.70.70.107/32;
+                }
+            }
+            then accept;
+        }
+        term no-natasha2 {
+            from {
+                destination-address {
+                    10.70.70.107/32;
+                }
+            }
+            then accept;
+        }
+        term sample-everything {
+            then {
+                sample;
+                accept;
+            }
+        }
+    }
+}
+applications {
+    application allow-icmp-app1 {
+        term t1 protocol icmp;
+    }
+    application allow-ssh-app1 {
+        term t1 protocol tcp destination-port 22;
+    }
+    application rem-ssh-app1 {
+        term t1 protocol tcp destination-port 22;
+    }
+    application rem-ftp-app1 {
+        term t1 protocol tcp destination-port 20-21;
+    }
+    application rem-http-app1 {
+        term t1 protocol tcp destination-port 80;
+    }
+    application allow-rdp-app1 {
+        term t1 protocol tcp destination-port 3389;
+    }
+    application rem-ftp-app2 {
+        term t2 protocol tcp destination-port 42000-42100;
+    }
+    application allow-ssh-srx-app1 {
+        term t1 protocol tcp destination-port 22;
+    }
+    application allow-ssh-corporate-app1 {
+        term t1 protocol tcp destination-port 22;
+    }
+    application allow-splunk-app1 {
+        term t1 protocol tcp destination-port 9997;
+    }
+    application allow-public-rdp-app1 {
+        term t1 protocol tcp destination-port 3389;
+    }
+    application allow-corporate-rdp-app1 {
+        term t1 protocol tcp destination-port 3389;
+    }
+    application allow-rdp-public-app1 {
+        term t1 protocol tcp destination-port 3389;
+    }
+    application allow-rdp-corporate-app1 {
+        term t1 protocol tcp destination-port 3389;
+    }
+    application allow-plc-in-app1 {
+        term t1 protocol tcp destination-port 22;
+    }
+    application allow-plc-in-app2 {
+        term t2 protocol tcp destination-port 502;
+    }
+    application allow-plc-out-app1 {
+        term t1 protocol tcp destination-port 502;
+    }
+    application-set allow-icmp-app {
+        application allow-icmp-app1;
+    }
+    application-set allow-ssh-app {
+        application allow-ssh-app1;
+    }
+    application-set rem-ssh-app {
+        application rem-ssh-app1;
+    }
+    application-set rem-ftp-app {
+        application rem-ftp-app1;
+        application rem-ftp-app2;
+    }
+    application-set rem-http-app {
+        application rem-http-app1;
+    }
+    application-set allow-rdp-app {
+        application allow-rdp-app1;
+    }
+    application-set allow-ssh-srx-app {
+        application allow-ssh-srx-app1;
+    }
+    application-set allow-ssh-corporate-app {
+        application allow-ssh-corporate-app1;
+    }
+    application-set allow-splunk-app {
+        application allow-splunk-app1;
+    }
+    application-set allow-public-rdp-app {
+        application allow-public-rdp-app1;
+    }
+    application-set allow-corporate-rdp-app {
+        application allow-corporate-rdp-app1;
+    }
+    application-set allow-rdp-public-app {
+        application allow-rdp-public-app1;
+    }
+    application-set allow-rdp-corporate-app {
+        application allow-rdp-corporate-app1;
+    }
+    application-set allow-plc-in-app {
+        application allow-plc-in-app1;
+        application allow-plc-in-app2;
+    }
+    application-set allow-plc-out-app {
+        application allow-plc-out-app1;
+    }
+}
+poe {
+    interface all;
+}
+vlans {
+    vlan0 {
+        vlan-id 2;
+        l3-interface vlan.0;
+    }
+    vlan1 {
+        vlan-id 3;
+        l3-interface vlan.1;
+    }
+}

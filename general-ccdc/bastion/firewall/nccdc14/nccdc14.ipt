@@ -1,0 +1,87 @@
+*filter
+# Speedway FORWARD Policy
+# ingress filter
+#
+# $Id: ./nccdc14.ipt $
+# $Date: 2014/04/24 $
+# inet
+:FORWARD DROP
+-N F_permit-icmp
+-A F_permit-icmp -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-icmp
+-N F_permit-voip
+-A F_permit-voip -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-voip
+-N F_permit-mail
+-A F_permit-mail -p tcp --dport 25 -d 10.66.66.10/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-mail
+-N F_permit-pop3
+-A F_permit-pop3 -p tcp --dport 110 -d 10.66.66.10/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-pop3
+-N F_permit-dns
+-A F_permit-dns -p udp --dport 53 -d 10.66.66.4/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A F_permit-dns -p udp --dport 53 -d 172.16.66.201/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-dns
+-N F_permit-http
+-A F_permit-http -p tcp --dport 80 -d 10.66.66.4/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A F_permit-http -p tcp --dport 80 -d 172.16.66.204/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-http
+-N F_permit-https
+-A F_permit-https -p tcp --dport 443 -d 10.66.66.20/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-https
+-N F_permit-ssh
+-A F_permit-ssh -p tcp --dport 22 -d 10.66.66.21/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-ssh
+-N F_permit-minecraft
+-A F_permit-minecraft -p tcp --dport 25565 -d 172.16.66.202/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-minecraft
+-N F_permit-unreal-tournament
+-A F_permit-unreal-tournament -p udp -m multiport --dports 7777:7783,27900 -d 172.16.66.203/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-unreal-tournament
+-N F_permit-moh
+-A F_permit-moh -p udp -m multiport --dports 12203:12218,12300,23000:23009 -d 172.16.66.210/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-moh
+-N F_permit-quake2
+-A F_permit-quake2 -p tcp --dport 27910 -d 172.16.66.211/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A F_permit-quake2 -p udp --dport 27910 -d 172.16.66.211/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-quake2
+-N F_permit-ventrilo
+-A F_permit-ventrilo -p tcp --dport 3784 -d 172.16.66.212/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A F_permit-ventrilo -p udp --dport 3784 -d 172.16.66.212/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-ventrilo
+-N F_permit-teamspeak
+-A F_permit-teamspeak -p tcp --dport 8767 -d 172.16.66.213/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A F_permit-teamspeak -p udp --dport 8767 -d 172.16.66.213/32 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-teamspeak
+-N F_permit-udp-established
+-A F_permit-udp-established -p udp --sport 1024:65535 -d 10.66.66.0/24 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A F_permit-udp-established -p udp --sport 1024:65535 -d 176.16.66.0/24 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_permit-udp-established
+-N F_default-deny
+-A F_default-deny -p all -j DROP
+-A FORWARD -j F_default-deny
+# Speedway FORWARD Policy
+# egress filter
+#
+# $Id: ./nccdc14.ipt $
+# $Date: 2014/04/24 $
+# inet
+:FORWARD DROP
+-N F_deny-to-bad-destinations
+-A F_deny-to-bad-destinations -p all -d 0.0.0.0/8 -j DROP
+-A F_deny-to-bad-destinations -p all -d 10.0.0.0/8 -j DROP
+-A F_deny-to-bad-destinations -p all -d 127.0.0.0/8 -j DROP
+-A F_deny-to-bad-destinations -p all -d 169.254.0.0/16 -j DROP
+-A F_deny-to-bad-destinations -p all -d 172.16.0.0/12 -j DROP
+-A F_deny-to-bad-destinations -p all -d 192.0.0.0/24 -j DROP
+-A F_deny-to-bad-destinations -p all -d 192.0.2.0/24 -j DROP
+-A F_deny-to-bad-destinations -p all -d 192.18.0.0/15 -j DROP
+-A F_deny-to-bad-destinations -p all -d 192.168.0.0/16 -j DROP
+-A F_deny-to-bad-destinations -p all -d 198.51.100.0/24 -j DROP
+-A F_deny-to-bad-destinations -p all -d 203.0.113.0/24 -j DROP
+-A F_deny-to-bad-destinations -p all -d 224.0.0.0/3 -j DROP
+-A FORWARD -j F_deny-to-bad-destinations
+-N F_default-accept
+-A F_default-accept -p all -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j F_default-accept
+COMMIT

@@ -1,0 +1,30 @@
+LOCALHOST       = 127.0.0.1/32
+XXX             = 0.0.0.0/32
+
+UPLINK_NET      = 10.47.8.0/30
+GATEWAY         = 10.47.8.1/32
+RAPUNZEL_UPLINK = 10.47.8.2/32
+
+RAPUNZEL        = 10.8.128.2/32
+SNOWWHITE       = 10.8.218.2/32
+CINDERELLA      = 10.8.72.2/32
+BELLE           = 10.8.184.2/32
+AURORA          = 10.8.247.2/32
+ARIEL           = 10.8.8.2/32
+ELSA            = 10.8.40.2/32
+#RAPUNZEL       = 203.0.113.128/32
+#SNOWWHITE      = 203.0.113.218/32
+#CINDERELLA     = 203.0.113.72/32
+#BELLE          = 203.0.113.184/32
+#AURORA         = 203.0.113.247/32
+#ARIEL          = 203.0.113.8/32
+#ELSA           = 203.0.113.40/32
+
+POD_NET         = 10.8.0.0/24
+POD             = RAPUNZEL
+                  SNOWWHITE
+                  CINDERELLA
+                  BELLE
+                  AURORA
+                  ARIEL
+                  ELSA

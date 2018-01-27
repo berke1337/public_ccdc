@@ -1,0 +1,16 @@
+--- capirca/lib/packetfilter.py	2013-09-10 17:13:47.000000000 -0500
++++ capirca/lib/packetfilter.py	2015-04-25 12:56:33.000000000 -0500
+@@ -240,8 +240,10 @@
+   def _GeneratePortStatement(self, ports):
+     port_list = []
+     for port_tuple in ports:
+-      for port in port_tuple:
+-        port_list.append(str(port))
++      if port_tuple[0]==port_tuple[1]:
++        port_list.append(str(port_tuple[0]))
++      else:
++        port_list.append(str(port_tuple[0])+':'+str(port_tuple[1]))
+     return '{ %s }' % ' '.join(list(set(port_list)))
+ 
+ 
+

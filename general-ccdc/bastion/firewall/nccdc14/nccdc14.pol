@@ -1,0 +1,177 @@
+# -----------------------------------------------------------------------------
+#                                   INGRESS
+# -----------------------------------------------------------------------------
+
+header {
+  comment:: "ingress filter"
+  target:: juniper edge-inbound inet
+  target:: srx from-zone outside to-zone pod
+  target:: speedway FORWARD DROP inet
+}
+
+term permit-icmp {
+  protocol:: icmp
+  action:: accept
+}
+
+term permit-voip {
+  protocol:: icmp
+  action:: accept
+}
+
+term permit-mail {
+  destination-address:: FAITH 
+  protocol:: tcp
+  destination-port:: SMTP
+  action:: accept
+}
+
+term permit-pop3 {
+  destination-address:: FAITH
+  protocol:: tcp
+  destination-port:: POP3
+  action:: accept
+}
+
+term permit-dns {
+  destination-address:: CORTANA VM_DNS
+  protocol:: udp
+  destination-port:: DNS
+  action:: accept
+}
+
+term permit-http {
+  destination-address:: CORTANA VM_TICKET_SYSTEM
+  protocol:: tcp
+  destination-port:: HTTP
+  action:: accept
+}
+
+term permit-https {
+  destination-address:: ELLIE
+  protocol:: tcp
+  destination-port:: HTTPS
+  action:: accept
+}
+
+term permit-ssh {
+  destination-address:: DESMOND
+  protocol:: tcp
+  destination-port:: SSH
+  action:: accept
+}
+
+term permit-minecraft {
+  destination-address:: VM_MINECRAFT
+  protocol:: tcp
+  destination-port:: MINECRAFT_PORTS
+  action:: accept
+}
+
+term permit-unreal-tournament {
+  destination-address:: VM_UNREAL_TOURNAMENT
+  protocol:: udp
+  destination-port:: UNREAL_TOURNAMENT_PORTS
+  action:: accept
+}
+
+term permit-moh {
+  destination-address:: VM_MEDAL_OF_HONOR
+  protocol:: udp
+  destination-port:: MEDAL_OF_HONOR_PORTS
+  action:: accept
+}
+
+term permit-quake2 {
+  destination-address:: VM_QUAKE2
+  protocol:: tcp udp
+  destination-port:: QUAKE2_PORTS
+  action:: accept
+}
+
+term permit-ventrilo {
+  destination-address:: VM_VENTRILO
+  protocol:: tcp udp
+  destination-port:: VENTRILO_PORTS
+  action:: accept
+}
+
+term permit-teamspeak {
+  destination-address:: VM_TEAMSPEAK2
+  protocol:: tcp udp
+  destination-port:: TEAMSPEAK2_PORTS
+  action:: accept
+}
+
+# Does not compile for SRX. Uncomment for iptables.
+#term permit-tcp-established {
+# destination-address:: POD
+# protocol:: tcp
+# option:: tcp-established
+# action:: accept
+#}
+
+# Probably not needed
+#term permit-udp-established {
+#  destination-address:: POD
+#  protocol:: udp
+#  source-port:: HIGH_PORTS
+#  action:: accept
+#}
+
+term default-deny {
+  action:: deny
+}
+
+# -----------------------------------------------------------------------------
+#                                   EGRESS
+# -----------------------------------------------------------------------------
+
+header {
+  comment:: "egress filter"
+  target:: juniper edge-outbound
+  target:: speedway FORWARD DROP inet
+}
+
+term deny-to-bad-destinations {
+  destination-address:: RFC1918 BOGON RESERVED
+  action:: deny
+}
+
+term permit-comp-servers {
+  destination-address:: COMP_SERVERS GOOGLE_DNS
+  protocol:: tcp udp
+  action:: accept
+}
+
+term permit-voip-phone {
+  source-address:: PHONE
+  destination-address:: COMP_NET
+  protocol:: tcp udp
+  port:: CISCO_VOIP
+  target:: accept
+}
+
+term default-deny {
+  action:: deny
+}
+
+# -----------------------------------------------------------------------------
+#                                   INPUT
+# -----------------------------------------------------------------------------
+
+header {
+  comment:: "input filter"
+  target:: juniper edge-filter
+  target:: speedway INPUT DROP inet
+}
+
+term permit-admin {
+  source-address:: POD
+  destination-address:: ROUTER
+  protocol:: tcp
+  port:: TELNET SSH
+  target:: accept
+}
+
+# TODO: DHCP?

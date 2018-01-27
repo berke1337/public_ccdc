@@ -1,0 +1,20 @@
+How to incorporate Palo Alto Firewall target into Capirca:
+
+1. Clone the capirca git repository at https://github.com/google/capirca
+
+2. Put the paloaltofw.py file into capirca > lib
+
+3. In capirca > aclgen.py:
+	
+	- add the following line with the other import statements: from lib import paloaltofw
+
+	- add the following line to the supported_targets dictionary in the render_filters method:
+	  'paloaltofw': {'optimized': False, 'renderer': paloaltofw.PaloAltoFW},
+
+4. To generate the palo alto networks xml file, run the following command from inside the capirca folder:
+
+	./aclgen.py -d ../paloaltofw/ -o ../paloaltofw/ -p ../paloaltofw/policy.pol
+
+	-d = path to the folder that contain your definitions ('.net' file)
+	-o = path to the folder that you want your palo alto firewall '.xml' file to be created
+	-p = path to your policy file ('.pol')

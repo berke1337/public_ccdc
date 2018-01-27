@@ -1,0 +1,275 @@
+header {
+  target:: packetfilter NCCDC
+}
+
+# ----------
+# Quarantine
+# ----------
+
+term disallow-resilient {
+  source-address:: RESILIENT
+  destination-address:: CORPORATE_NET
+  protocol:: tcp udp
+  action:: deny
+}
+
+# -------
+# General
+# -------
+
+term allow-icmp-out {
+  source-address:: CORPORATE_NET
+  protocol:: icmp
+  action:: accept
+}
+
+term allow-icmp-in {
+  source-address:: BLACKTEAM_NET
+  destination-address:: CORPORATE_NET
+  protocol:: icmp
+  action:: accept
+}
+
+term allow-dhcp {
+  source-address:: CORPORATE_NET
+  destination-address:: CORPORATE_NET
+  destination-port:: DHCP
+  protocol:: udp
+  action:: accept
+}
+
+term allow-dns-out {
+  source-address:: CORPORATE_NET
+  destination-address:: DNS_SERVERS
+  destination-port:: DNS
+  protocol:: tcp udp
+  action:: accept
+}
+
+# ----------------------
+# Corporate-to-Control
+# ----------------------
+
+# TODO: lock down
+term allow-control {
+  source-address:: CORPORATE
+  destination-address:: CONTROL_NET
+  action:: accept
+}
+
+term cloud-tcpdump {
+  source-address:: SRX
+  destination-address:: NATASHA
+  destination-port:: SSH 
+  protocol:: tcp
+  action:: accept
+}
+
+# ----------------------
+# Corporate-to-Corporate
+# ----------------------
+
+term allow-icmp-corp {
+  source-address:: CORPORATE
+  destination-address:: CORPORATE
+  protocol:: icmp
+  action:: accept
+}
+
+# FIXME: remove when Skyler says so
+term tmp-allow-windows-crap {
+  source-address:: HELLFIRE WINDOWS_WORKSTATIONS
+  destination-address:: HELLFIRE WINDOWS_WORKSTATIONS
+  protocol:: tcp
+  action:: accept
+}
+
+#term allow-http-ticketing {
+#  source-address:: CORPORATE
+#  destination-address:: RESILIENT
+#  destination-port:: HTTP 
+#  protocol:: tcp
+#  action:: accept
+#}
+
+term allow-ssh {
+  source-address:: CORPORATE
+  destination-address:: CORPORATE
+  destination-port:: SSH 
+  protocol:: tcp
+  action:: accept
+}
+
+# AD + Updates
+# TODO: lock down ports
+term wsus-hellfire {
+  source-address:: WSUS HELLFIRE
+  destination-address:: WSUS HELLFIRE
+  protocol:: tcp udp
+  action:: accept
+}
+
+term allow-vsphere-in {
+  source-address:: VSPHERE_CLIENTS
+  destination-address:: ESXI_SERVER
+  destination-port:: VSPHERE_IN 
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-vsphere-out {
+  source-address:: ESXI_SERVER
+  destination-address:: VSPHERE_CLIENTS
+  destination-port:: VSPHERE_OUT
+  protocol:: tcp udp
+  action:: accept
+}
+
+# ---------
+# Blackteam
+# ---------
+
+# TODO: restrict destination ports
+term allow-vsphere {
+  source-address:: CORPORATE
+  destination-address:: BLACKTEAM_VSPHERE_NET
+  protocol:: tcp
+  action:: accept
+}
+
+# TODO: narrow
+term allow-blackteam-out {
+  source-address:: CORPORATE
+  destination-address:: BLACKTEAM
+  protocol:: tcp udp
+  action:: accept
+}
+
+term allow-phone-in {
+  source-address:: BLACKTEAM_VOIP_NET
+  destination-address:: PHONE
+  protocol:: udp
+  action:: accept
+}
+
+term allow-phone-out {
+  source-address:: PHONE
+  destination-address:: BLACKTEAM_VOIP_NET
+#  destination-address:: BLACKTEAM_VOIP_SERVER
+  destination-port:: VOIP DHCP
+  protocol:: udp
+  action:: accept
+}
+
+term allow-proxy {
+  source-address:: CORPORATE
+  destination-address:: BLACKTEAM_PROXY
+  destination-port:: HTTP_PROXY
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-canary-out {
+  source-address:: CANARY
+  destination-address:: CANARY_NET
+  action:: accept
+}
+
+term allow-canary-in {
+  source-address:: CANARY_NET
+  destination-address:: CANARY
+  action:: accept
+}
+
+term allow-foxbox-out {
+  source-address:: FOXBOX
+  destination-address:: FOXBOX_NET
+  destination-port:: HTTP
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-foxbox-in {
+  source-address:: FOXBOX_NET
+  destination-address:: FOXBOX
+  destination-port:: HTTP
+  protocol:: tcp
+  action:: accept
+}
+
+# --------------
+# Service Checks
+# --------------
+
+# 3 HTTP service checks
+term allow-http {
+  destination-address:: ANTHONY INITIATIVE RESILIENT
+  destination-port:: HTTP HTTPS
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-mail {
+  destination-address:: INITIATIVE
+  destination-port:: SMTP POP3
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-dns {
+  destination-address:: THUNDERBOLTS
+  destination-port:: DNS
+  protocol:: udp
+  action:: accept
+}
+
+term allow-ftp {
+  destination-address:: HELLFIRE
+  destination-port:: FTP_CTRL FTP_DATA FTP_PASV
+  protocol:: tcp
+  action:: accept
+}
+
+# Splunk inject.
+term allow-splunk {
+  source-address:: SPLUNK_SERVER
+  destination-address:: HELLFIRE
+  destination-port:: SPLUNK
+  protocol:: tcp
+  action:: accept
+}
+
+term allow-splunk-web {
+  destination-address:: SPLUNK_SERVER
+  destination-port:: SPLUNK_WEB
+  protocol:: tcp
+  action:: accept
+}
+
+# TODO: lock this down more!
+term allow-shareview-globally-out {
+  source-address:: SV_APPLIANCE SV_WORKBENCH
+  protocol:: tcp udp
+  action:: accept
+}
+
+term allow-shareview-globally-in {
+  destination-address:: SV_APPLIANCE SV_WORKBENCH
+  protocol:: tcp udp
+  action:: accept
+}
+
+term allow-shareview-clients {
+  source-address:: WINDOWS_WORKSTATIONS
+  destination-address:: HELLFIRE
+  destination-port:: RAYTHEON
+  protocol:: tcp
+  action:: accept
+}
+# ------------
+# Default Deny
+# ------------
+
+term default-deny {
+  action:: deny
+}

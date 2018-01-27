@@ -1,0 +1,346 @@
+security {
+    zones {
+        security-zone pod {
+            replace: address-book {
+                address FAITH_0 10.66.66.10/32;
+                address CORTANA_0 10.66.66.4/32;
+                address VM_DNS_0 172.16.66.201/32;
+                address VM_TICKET_SYSTEM_0 172.16.66.204/32;
+                address ELLIE_0 10.66.66.20/32;
+                address DESMOND_0 10.66.66.21/32;
+                address VM_MINECRAFT_0 172.16.66.202/32;
+                address VM_UNREAL_TOURNAMENT_0 172.16.66.203/32;
+                address VM_MEDAL_OF_HONOR_0 172.16.66.210/32;
+                address VM_QUAKE2_0 172.16.66.211/32;
+                address VM_VENTRILO_0 172.16.66.212/32;
+                address VM_TEAMSPEAK2_0 172.16.66.213/32;
+                address NET_0 10.66.66.0/24;
+                address NET_1 176.16.66.0/24;
+                address-set FAITH {
+                    address FAITH_0;
+                }
+                address-set CORTANA {
+                    address CORTANA_0;
+                }
+                address-set VM_DNS {
+                    address VM_DNS_0;
+                }
+                address-set VM_TICKET_SYSTEM {
+                    address VM_TICKET_SYSTEM_0;
+                }
+                address-set ELLIE {
+                    address ELLIE_0;
+                }
+                address-set DESMOND {
+                    address DESMOND_0;
+                }
+                address-set VM_MINECRAFT {
+                    address VM_MINECRAFT_0;
+                }
+                address-set VM_UNREAL_TOURNAMENT {
+                    address VM_UNREAL_TOURNAMENT_0;
+                }
+                address-set VM_MEDAL_OF_HONOR {
+                    address VM_MEDAL_OF_HONOR_0;
+                }
+                address-set VM_QUAKE2 {
+                    address VM_QUAKE2_0;
+                }
+                address-set VM_VENTRILO {
+                    address VM_VENTRILO_0;
+                }
+                address-set VM_TEAMSPEAK2 {
+                    address VM_TEAMSPEAK2_0;
+                }
+                address-set NET {
+                    address NET_0;
+                    address NET_1;
+                }
+            }
+        }
+    }
+    replace: policies {
+        /*
+        $Id: ./nccdc14.srx $
+        $Date: 2014/04/24 $
+        */
+        from-zone outside to-zone pod {
+            policy permit-icmp {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application permit-icmp-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-voip {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application permit-voip-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-mail {
+                match {
+                    source-address any;
+                    destination-address [ FAITH ];
+                    application permit-mail-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-pop3 {
+                match {
+                    source-address any;
+                    destination-address [ FAITH ];
+                    application permit-pop3-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-dns {
+                match {
+                    source-address any;
+                    destination-address [ CORTANA VM_DNS ];
+                    application permit-dns-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-http {
+                match {
+                    source-address any;
+                    destination-address [ CORTANA VM_TICKET_SYSTEM ];
+                    application permit-http-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-https {
+                match {
+                    source-address any;
+                    destination-address [ ELLIE ];
+                    application permit-https-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-ssh {
+                match {
+                    source-address any;
+                    destination-address [ DESMOND ];
+                    application permit-ssh-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-minecraft {
+                match {
+                    source-address any;
+                    destination-address [ VM_MINECRAFT ];
+                    application permit-minecraft-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-unreal-tournament {
+                match {
+                    source-address any;
+                    destination-address [ VM_UNREAL_TOURNAMENT ];
+                    application permit-unreal-tournament-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-moh {
+                match {
+                    source-address any;
+                    destination-address [ VM_MEDAL_OF_HONOR ];
+                    application permit-moh-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-quake2 {
+                match {
+                    source-address any;
+                    destination-address [ VM_QUAKE2 ];
+                    application permit-quake2-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-ventrilo {
+                match {
+                    source-address any;
+                    destination-address [ VM_VENTRILO ];
+                    application permit-ventrilo-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-teamspeak {
+                match {
+                    source-address any;
+                    destination-address [ VM_TEAMSPEAK2 ];
+                    application permit-teamspeak-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy permit-udp-established {
+                match {
+                    source-address any;
+                    destination-address [ NET ];
+                    application permit-udp-established-app;
+                }
+                then {
+                    permit;
+                }
+            }
+            policy default-deny {
+                match {
+                    source-address any;
+                    destination-address any;
+                    application any;
+                }
+                then {
+                    deny;
+                }
+            }
+        }
+    }
+}
+replace: applications {
+    application-set permit-icmp-app {
+        application permit-icmp-app1;
+    }
+    application permit-icmp-app1 {
+        term t1 protocol icmp;
+    }
+    application-set permit-voip-app {
+        application permit-voip-app1;
+    }
+    application permit-voip-app1 {
+        term t1 protocol icmp;
+    }
+    application-set permit-mail-app {
+        application permit-mail-app1;
+    }
+    application permit-mail-app1 {
+        term t1 protocol tcp destination-port 25;
+    }
+    application-set permit-pop3-app {
+        application permit-pop3-app1;
+    }
+    application permit-pop3-app1 {
+        term t1 protocol tcp destination-port 110;
+    }
+    application-set permit-dns-app {
+        application permit-dns-app1;
+    }
+    application permit-dns-app1 {
+        term t1 protocol udp destination-port 53;
+    }
+    application-set permit-http-app {
+        application permit-http-app1;
+    }
+    application permit-http-app1 {
+        term t1 protocol tcp destination-port 80;
+    }
+    application-set permit-https-app {
+        application permit-https-app1;
+    }
+    application permit-https-app1 {
+        term t1 protocol tcp destination-port 443;
+    }
+    application-set permit-ssh-app {
+        application permit-ssh-app1;
+    }
+    application permit-ssh-app1 {
+        term t1 protocol tcp destination-port 22;
+    }
+    application-set permit-minecraft-app {
+        application permit-minecraft-app1;
+    }
+    application permit-minecraft-app1 {
+        term t1 protocol tcp destination-port 25565;
+    }
+    application-set permit-unreal-tournament-app {
+        application permit-unreal-tournament-app1;
+        application permit-unreal-tournament-app2;
+    }
+    application permit-unreal-tournament-app1 {
+        term t1 protocol udp destination-port 7777-7783;
+    }
+    application permit-unreal-tournament-app2 {
+        term t2 protocol udp destination-port 27900;
+    }
+    application-set permit-moh-app {
+        application permit-moh-app1;
+        application permit-moh-app2;
+        application permit-moh-app3;
+    }
+    application permit-moh-app1 {
+        term t1 protocol udp destination-port 12203-12218;
+    }
+    application permit-moh-app2 {
+        term t2 protocol udp destination-port 12300;
+    }
+    application permit-moh-app3 {
+        term t3 protocol udp destination-port 23000-23009;
+    }
+    application-set permit-quake2-app {
+        application permit-quake2-app1;
+        application permit-quake2-app2;
+    }
+    application permit-quake2-app1 {
+        term t1 protocol tcp destination-port 27910;
+    }
+    application permit-quake2-app2 {
+        term t2 protocol udp destination-port 27910;
+    }
+    application-set permit-ventrilo-app {
+        application permit-ventrilo-app1;
+        application permit-ventrilo-app2;
+    }
+    application permit-ventrilo-app1 {
+        term t1 protocol tcp destination-port 3784;
+    }
+    application permit-ventrilo-app2 {
+        term t2 protocol udp destination-port 3784;
+    }
+    application-set permit-teamspeak-app {
+        application permit-teamspeak-app1;
+        application permit-teamspeak-app2;
+    }
+    application permit-teamspeak-app1 {
+        term t1 protocol tcp destination-port 8767;
+    }
+    application permit-teamspeak-app2 {
+        term t2 protocol udp destination-port 8767;
+    }
+    application-set permit-udp-established-app {
+        application permit-udp-established-app1;
+    }
+    application permit-udp-established-app1 {
+        term t1 protocol udp source-port 1024-65535;
+    }
+}

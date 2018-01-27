@@ -1,0 +1,127 @@
+#!/bin/sh
+
+# Our team number.
+# Used to compute 3rd octet in public IPs.
+team=6
+
+hush() {
+  "$@" > /dev/null
+  #echo $*
+}
+
+nat() {
+  NAME=$1
+  IF=$2
+  INT_IP=172.20.$3
+  B=${3##*.}
+  EXT_IP=172.25.$((20 + $team)).$B
+  LOC_IP=10.137.$B.2
+  hush pfctl -t $NAME -T flush
+  hush pfctl -t $NAME -T add $LOC_IP $EXT_IP $INT_IP
+  hush pfctl -t locals -T add $LOC_IP $EXT_IP $INT_IP
+  echo rdr to $EXT_IP tag $NAME -\> $LOC_IP
+  echo rdr on {le1,le2} to $INT_IP tag $NAME -\> $LOC_IP
+  echo nat on le0 from $LOC_IP tag $NAME -\> $EXT_IP
+  echo nat on {le1,le2} from $LOC_IP tag $NAME -\> $INT_IP
+  hush ifconfig $IF add $INT_IP/32
+  hush ifconfig $IF add 10.137.$B.1/30
+}
+
+# Creates a PF rule.
+# $1: interface restrictions
+# $2: src:[port]
+# $3: dst:[port]
+# $4: [proto]
+pass()
+{
+  src=${2%%:*}
+  pfctl -sT | egrep -q \^$src\$ && src="<$src>"
+
+  dst=${3%%:*}
+  pfctl -sT | egrep -q \^$dst\$ && dst="<$dst>"
+
+  sport=${2#*:}
+  dport=${3#*:}
+
+  echo pass $1 inet ${4:+proto }$4 \
+    from $src ${sport:+port }$sport \
+    to   $dst ${dport:+port }$dport
+#    label ${2}_to_${3}
+}
+
+# Creates a PF rule for the local interfaces.
+lan()
+{
+  pass "on {le1,le2}" "$@"
+}
+
+# Creates a PF rule for all interfaces.
+all()
+{
+  pass "" "$@"
+}
+
+
+## OPTIONS
+echo set block-policy drop
+echo scrub in all fragment reassemble
+
+hush pfctl -t locals -T flush
+hush pfctl -t self -T flush
+
+## TRANSLATION
+nat ecom le1 240.11
+nat dns le1 240.23
+nat email le2 241.39
+nat ftp le2 241.9
+nat dfs le2 241.3
+nat ad le2 241.27
+
+hush pfctl -t locals -T add self
+hush pfctl -t self -T add self
+
+## RULES
+
+# Completely disable IPv6
+echo block quick inet6 all
+
+# Prevent spoofing from WAN.
+echo block in quick on le0 from '<locals>' to any
+
+# Prevent source address spoofing.
+#echo block out quick on le0 from ! '<locals>' to any
+
+# Block all non-matching packets and log them.
+echo block log all
+
+# Enable SSH tunneling (practice only).
+#all self: 128.32.45.42:10106 tcp
+#all self: self:22 tcp
+
+# -------------------------------------
+
+all any: any: icmp
+
+all any: ecom:{80,443} tcp
+
+lan locals: dns:1514 udp  # OSSEC
+lan self: dns:25 tcp      # Bro emails
+lan ecom: dns:3306 tcp
+lan email: dns:3306 tcp
+all any: dns:53 tcp
+all any: dns:53 udp
+
+all any: email:{80,443,25,465,587} tcp
+all email: any:{25,465,587} tcp # outbound SMTP
+
+all any: ftp:21 tcp
+all any: ftp:49000:51000 tcp
+all ftp:20 any: tcp  # outbound active FTP
+
+all email: ad: # TODO: limit to LDAP only.
+all any: ad:53 tcp
+all any: ad:53 udp
+
+all locals: locals:22 tcp
+all locals: any:{80,443} tcp
+all locals: any:53 udp

@@ -1,0 +1,104 @@
+# -----------------------------------------------------------------------------
+#                                   INGRESS
+# -----------------------------------------------------------------------------
+
+header {
+  comment:: "ingress filter"
+  target:: speedway FORWARD DROP inet
+}
+
+# Allow ICMP everywhere.
+term permit-icmp {
+  protocol:: icmp
+  action:: accept
+}
+
+# Work with speedway (iptables) only.
+term permit-tcp-established {
+ destination-address:: POD
+ protocol:: tcp
+ option:: tcp-established
+ action:: accept
+}
+
+#term permit-udp-established {
+#  destination-address:: POD
+#  protocol:: udp
+#  source-port:: HIGH_PORTS
+#  action:: accept
+#}
+
+term permit-mail {
+  destination-address:: GROOT
+  protocol:: tcp
+  destination-port:: SMTP HTTP
+  action:: accept
+}
+
+term in-default-deny {
+  action:: deny
+}
+
+# -----------------------------------------------------------------------------
+#                                   EGRESS
+# -----------------------------------------------------------------------------
+
+header {
+  comment:: "egress filter"
+  target:: speedway FORWARD DROP inet
+}
+
+term deny-to-bad-destinations {
+  destination-address:: RFC1918 BOGON RESERVED
+  action:: deny
+}
+
+#term permit-comp-servers {
+#  destination-address:: COMP_SERVERS GOOGLE_DNS
+#  protocol:: tcp udp
+#  action:: accept
+#}
+
+#term permit-voip-phone {
+#  source-address:: PHONE
+#  destination-address:: COMP_NET
+#  protocol:: tcp udp
+#  port:: CISCO_VOIP
+#  target:: accept
+#}
+
+term out-default-deny {
+  action:: deny
+}
+
+# -----------------------------------------------------------------------------
+#                                   INPUT
+# -----------------------------------------------------------------------------
+
+header {
+  comment:: "input filter"
+  target:: speedway INPUT DROP inet
+}
+
+term permit-local {
+  source-interface:: lo
+  action:: accept
+}
+
+term permit-icmp {
+  protocol:: icmp
+  action:: accept
+}
+
+term permit-tcp-established {
+ protocol:: tcp
+ option:: tcp-established
+ action:: accept
+}
+
+term permit-admin {
+  source-address:: POD
+  protocol:: tcp
+  destination-port:: SSH
+  action:: accept
+}

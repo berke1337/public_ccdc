@@ -1,0 +1,161 @@
+XXX = 0.0.0.0/32
+
+PUBLIC_DNS = 8.8.8.8/32
+             8.8.4.4/32
+             12.127.17.71/32
+             12.127.17.72/32
+
+# --------------------------------
+# Corporate
+# --------------------------------
+
+SWITCH = 10.70.70.77/32
+
+THUNDERBOLTS = 10.70.70.5/32
+INITIATIVE = 10.70.70.10/32
+ANTHONY = 10.70.70.15/32 # e-commerce
+HELLFIRE = 10.70.70.20/32
+MONGER = 10.70.70.200/32
+NATASHA = 10.70.70.107/32
+CLINT = 10.70.70.105/32
+NICK = 10.70.70.106/32
+BRUCE = 10.70.70.104/32
+WSUS = 10.70.70.21/32
+KALI = 10.70.70.78/32
+SV_APPLIANCE = 10.70.70.109/32
+SV_WORKBENCH = 10.70.70.110/32
+
+CANARY = 10.70.70.250/32
+CANARY_NET = 192.168.251.0/24
+FOXBOX = 10.70.70.251/32
+FOXBOX_NET = 10.16.0.0/16 10.130.0.0/16
+PHONE = 10.70.70.252/32
+
+ESXI_SERVER = MONGER
+VSPHERE_CLIENTS = HELLFIRE
+                  CLINT
+WINDOWS_WORKSTATIONS = CLINT
+                       NICK
+	               BRUCE
+                       WSUS
+WINDOWS_AD_SERVER = HELLFIRE
+
+POD = THUNDERBOLTS
+      INITIATIVE
+      ANTHONY
+      HELLFIRE
+      MONGER
+      NATASHA
+      CLINT
+      NICK
+      BRUCE
+      WSUS
+      CANARY
+      FOXBOX
+      PHONE
+      KALI
+      SWITCH
+      SV_APPLIANCE
+      SV_WORKBENCH
+
+# Internal Cloud
+GUIDANCE = 10.70.70.201/32
+SUREVIEW = 10.70.70.202/32
+RESILIENT = 10.70.70.205/32	# ticketing system (Solaris)
+
+INTERNAL_CLOUD = GUIDANCE
+                 SUREVIEW
+                 RESILIENT
+
+CORPORATE = POD
+            INTERNAL_CLOUD
+
+CORPORATE_NET = 10.70.70.0/24
+
+# --------------------------------
+# Control
+# --------------------------------
+
+ARP_SPOOFER = 172.16.70.137/32
+              172.16.200.137/32
+
+SRX = 172.16.70.1/32
+      172.16.70.2/32
+
+SRX_DNS_SERVERS = 208.67.222.220/32
+                  208.67.222.222/32
+
+
+HMI = 		172.16.70.202/32
+      		172.16.200.202/32
+HISTORIAN = 	172.16.70.203/32
+            	172.16.200.203/32
+OPC = 		172.16.70.204/32
+      		172.16.200.204/32
+HMI_WRKS = 	172.16.70.205/32
+           	172.16.200.205/32
+ENGINEER_WRKS = 172.16.70.210/32
+                172.16.200.210/32
+NMIS = 		172.16.70.211/32
+       		172.16.200.211/32
+IDS = 		172.16.70.253/32
+      		172.16.200.253/32
+
+CONTROL = HMI
+          HISTORIAN
+          OPC
+	  HMI_WRKS
+          ENGINEER_WRKS
+	  NMIS
+          IDS
+
+CONTROL_NET = 172.16.70.0/24
+
+# --------------------------------
+# Plant
+# --------------------------------
+
+PLC240 = 172.16.201.240
+PLC241 = 172.16.201.241
+PLC242 = 172.16.201.242
+
+PLANT = PLC240
+        PLC241
+        PLC242
+
+# --------------------------------
+# Blackteam
+# --------------------------------
+
+SPLUNK_SERVER = 192.168.7.70/32
+
+BLACKTEAM_VSPHERE_NET = 192.168.224.0/24
+
+BLACKTEAM_PORTAL = 10.120.0.5/32
+BLACKTEAM_FILEREPO = 10.120.0.9/32
+BLACKTEAM_TIME = 10.120.0.10/32
+BLACKTEAM_VOIP_SERVER = 10.120.0.100/32
+BLACKTEAM_VOIP_NET = 10.120.0.0/24
+BLACKTEAM_PROXY = 10.120.0.200/32
+
+BLACKTEAM_PRINTERS = 10.110.0.200/32
+                     10.110.0.201/32
+
+BLACKTEAM = BLACKTEAM_PORTAL
+            BLACKTEAM_FILEREPO
+            BLACKTEAM_TIME
+            BLACKTEAM_VOIP_SERVER
+            BLACKTEAM_PROXY
+            BLACKTEAM_PRINTERS
+
+BLACKTEAM_NET = 10.110.0.0/16
+                10.120.0.0/16
+                192.168.251.0/24
+
+# -----
+# Other
+# -----
+
+DNS_SERVERS = PUBLIC_DNS
+              THUNDERBOLTS
+	      SRX_DNS_SERVERS

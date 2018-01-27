@@ -1,0 +1,87 @@
+################
+### RULEBASE ###
+################
+
+# rulebase -> security -> rules
+# Defaults (if not specified):
+#	source = any
+#	destination = any
+#	application = any
+#	service = application-default
+# New variables (?):
+#	rule-type
+#	service
+# application
+
+header {
+	target:: paloaltofw from Pod-public to Firewall
+}
+
+term allow-ping-Firewall {
+	destination-address:: FIREWALL
+	protocol:: icmp
+	action:: allow
+}
+
+term allow-ssh-Firewall {
+	destination-address:: FIREWALL
+	destination-port:: SSH
+	protocol:: tcp
+	action:: allow
+}
+
+term allow-https-Firewall {
+	destination-address:: FIREWALL
+	destination-port:: HTTPS
+	protocol:: tcp
+	action:: allow
+}
+
+header {
+	target:: paloaltofw from Pod-Private to Pod-Private
+}
+
+term allow-icmp{
+	source:: POD
+	destination:: POD
+	rule-type:: intrazone
+	protocol:: icmp
+	action:: allow
+}
+
+term allow-ssh{
+	source:: POD
+	destination:: POD
+	rule-type:: intrazone
+	destination-port:: SSH
+	protocol:: tcp
+	action:: allow
+}
+
+header {
+	target:: paloaltofw from Pod-Public to Internet
+}
+
+term allow-any {
+	source:: POD
+	action:: allow
+}
+
+header {
+	target:: paloaltofw from Internet to Firewall
+}
+
+term allow-ping{
+	destination:: FIREWALL
+	protocol:: icmp
+	action:: allow
+}
+
+# rulebase -> default-security-rules -> rules
+header {
+	target:: paloaltofw default-security-rules
+}
+
+term intrazone-default{
+	action:: deny
+}

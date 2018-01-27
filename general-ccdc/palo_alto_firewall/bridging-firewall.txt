@@ -1,0 +1,112 @@
+Network diagram for the following configuration
+
+    Upstream router
+       |
+       | DHCP                    (Internet “untrust”)
+    +--1-------+
+    | firewall |                 ---------------------
+    +--2----3--+
+       |    | 192.168.10.0/24    (local network “pod”)
+       /    \
+ Machine1  Machine2
+
+The firewall bridges the machines on the local network and enforces a firewall 
+policy on that bridge. The firewall also routes traffic between the local 
+network and the Internet.
+
+Overall policy:
+
+  Pod  -> firewall        allow ping, HTTPS, SSH
+  Pod <-> Pod             allow ping, SSH
+  Pod  -> Internet        allow
+  Internet -> firewall    allow ping
+  default                 not allowed
+
+Configuration:
+
+network {
+  interface {
+    ethernet {
+      ethernet1/1 {
+        layer3 { interface-management-profile allow-ping; dhcp-client; }
+      }
+      ethernet1/2 { layer2; }
+      ethernet1/3 { layer2; }
+    }
+    vlan {
+      units {
+        vlan.pod {
+          ip { 192.168.10.1/24; }
+          interface-management-profile allow-mgmt;
+        }
+      }
+    }
+  }
+  profiles {
+    interface-management-profile {
+      allow-mgmt { https yes; ssh yes; ping yes; }
+      allow-ping { ssh no; ping yes; }
+    }
+  }
+  virtual-router {
+    student-vr { interface [ ethernet1/1 vlan.pod ]; }
+  }
+  vlan {
+    Pod {
+      virtual-interface { interface vlan.pod; }
+      interface [ ethernet1/2 ethernet1/3 ];
+    }
+  }
+}
+
+zone {
+  Untrust-L3 {
+    network { layer3 ethernet1/1; }
+  }
+  Pod-L3 {
+    network { layer3 vlan.pod; }
+  }
+  Pod-L2 {
+    network { layer2 [ ethernet1/2 ethernet1/3 ]; }
+  }
+}
+
+rulebase {
+  security {
+    rules {
+      Pod2Untrust {
+        from Pod-L3;
+        source any;
+        to Untrust-L3;
+        destination any;
+        application any;
+        service application-default;
+        action allow;
+      }
+      Pod2Pod {
+        rule-type intrazone;
+        from Pod-L2;
+        source any;
+        to Pod-L2;
+        destination any;
+        application [ icmp ping ssh ];
+        service application-default;
+        action allow;
+      }
+      Pod2Firewall {
+        from Pod-L3;
+        source any;
+        to Pod-L3;
+        destination 192.168.10.1;
+        application any;
+        service application-default;
+        action allow;
+      }
+    }
+  }
+  default-security-rules {
+    rules {
+      intrazone-default { action deny; }
+    }
+  }
+}

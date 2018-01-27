@@ -1,0 +1,246 @@
+# practice script, run from serial or the last port
+configure terminal
+vtp mode transparent
+interface FastEthernet 0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 101
+exit
+interface FastEthernet 0/3
+switchport mode access
+switchport nonegotiate
+switchport access vlan 103
+exit
+interface FastEthernet 0/4
+switchport mode access
+switchport nonegotiate
+switchport access vlan 104
+exit
+interface FastEthernet 0/5
+switchport mode access
+switchport nonegotiate
+switchport access vlan 105
+exit
+interface FastEthernet 0/6
+switchport mode access
+switchport nonegotiate
+switchport access vlan 106
+exit
+interface FastEthernet 0/7
+switchport mode access
+switchport nonegotiate
+switchport access vlan 107
+exit
+interface FastEthernet 0/8
+switchport mode access
+switchport nonegotiate
+switchport access vlan 108
+exit
+interface FastEthernet 0/9
+switchport mode access
+switchport nonegotiate
+switchport access vlan 109
+exit
+interface FastEthernet 0/10
+switchport mode access
+switchport nonegotiate
+switchport access vlan 110
+exit
+interface FastEthernet 0/11
+switchport mode access
+switchport nonegotiate
+switchport access vlan 111
+exit
+interface FastEthernet 0/12
+switchport mode access
+switchport nonegotiate
+switchport access vlan 112
+exit
+interface FastEthernet 0/13
+switchport mode access
+switchport nonegotiate
+switchport access vlan 113
+exit
+interface FastEthernet 0/14
+switchport mode access
+switchport nonegotiate
+switchport access vlan 114
+exit
+interface FastEthernet 0/15
+switchport mode access
+switchport nonegotiate
+switchport access vlan 115
+exit
+interface FastEthernet 0/16
+switchport mode access
+switchport nonegotiate
+switchport access vlan 116
+exit
+interface FastEthernet 0/17
+switchport mode access
+switchport nonegotiate
+switchport access vlan 117
+exit
+interface FastEthernet 0/18
+switchport mode access
+switchport nonegotiate
+switchport access vlan 118
+exit
+interface FastEthernet 0/19
+switchport mode access
+switchport nonegotiate
+switchport access vlan 119
+exit
+interface FastEthernet 0/20
+switchport mode access
+switchport nonegotiate
+switchport access vlan 120
+exit
+interface FastEthernet 0/21
+switchport mode access
+switchport nonegotiate
+switchport access vlan 121
+exit
+interface FastEthernet 0/22
+switchport mode access
+switchport nonegotiate
+switchport access vlan 122
+exit
+interface FastEthernet 0/23
+switchport mode access
+switchport nonegotiate
+switchport access vlan 123
+exit
+interface FastEthernet 0/24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 124
+exit
+interface FastEthernet 0/25
+switchport mode access
+switchport nonegotiate
+switchport access vlan 125
+exit
+interface FastEthernet 0/26
+switchport mode access
+switchport nonegotiate
+switchport access vlan 126
+exit
+interface FastEthernet 0/27
+switchport mode access
+switchport nonegotiate
+switchport access vlan 127
+exit
+interface FastEthernet 0/28
+switchport mode access
+switchport nonegotiate
+switchport access vlan 128
+exit
+interface FastEthernet 0/29
+switchport mode access
+switchport nonegotiate
+switchport access vlan 129
+exit
+interface FastEthernet 0/30
+switchport mode access
+switchport nonegotiate
+switchport access vlan 130
+exit
+interface FastEthernet 0/31
+switchport mode access
+switchport nonegotiate
+switchport access vlan 131
+exit
+interface FastEthernet 0/32
+switchport mode access
+switchport nonegotiate
+switchport access vlan 132
+exit
+interface FastEthernet 0/33
+switchport mode access
+switchport nonegotiate
+switchport access vlan 133
+exit
+interface FastEthernet 0/34
+switchport mode access
+switchport nonegotiate
+switchport access vlan 134
+exit
+interface FastEthernet 0/35
+switchport mode access
+switchport nonegotiate
+switchport access vlan 135
+exit
+interface FastEthernet 0/36
+switchport mode access
+switchport nonegotiate
+switchport access vlan 136
+exit
+interface FastEthernet 0/37
+switchport mode access
+switchport nonegotiate
+switchport access vlan 137
+exit
+interface FastEthernet 0/38
+switchport mode access
+switchport nonegotiate
+switchport access vlan 138
+exit
+interface FastEthernet 0/39
+switchport mode access
+switchport nonegotiate
+switchport access vlan 139
+exit
+interface FastEthernet 0/40
+switchport mode access
+switchport nonegotiate
+switchport access vlan 140
+exit
+interface FastEthernet 0/41
+switchport mode access
+switchport nonegotiate
+switchport access vlan 141
+exit
+interface FastEthernet 0/42
+switchport mode access
+switchport nonegotiate
+switchport access vlan 142
+exit
+interface FastEthernet 0/43
+switchport mode access
+switchport nonegotiate
+switchport access vlan 143
+exit
+interface FastEthernet 0/44
+switchport mode access
+switchport nonegotiate
+switchport access vlan 144
+exit
+interface FastEthernet 0/45
+switchport mode access
+switchport nonegotiate
+switchport access vlan 145
+exit
+interface FastEthernet 0/46
+switchport mode access
+switchport nonegotiate
+switchport access vlan 146
+exit
+interface FastEthernet 0/47
+switchport mode access
+switchport nonegotiate
+switchport access vlan 147
+exit
+interface GigabitEthernet 0/2
+switchport mode access
+switchport nonegotiate
+switchport access vlan 149
+exit
+interface FastEthernet 0/2
+switchport mode trunk
+switchport nonegotiate
+switchport trunk encapsulation dot1q
+switchport trunk allowed vlan all
+switchport trunk native vlan 100
+spanning-tree bpdufilter enable
+exit

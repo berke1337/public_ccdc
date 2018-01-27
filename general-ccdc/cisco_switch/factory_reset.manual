@@ -1,0 +1,26 @@
+== To Factory Reset ==
+# Either run this on serial shortly after boot -or- Hold mode button until LED's stop flashing.
+en
+delete flash:/config.text
+
+
+delete flash:/vlan.dat
+
+
+write erase
+
+reload
+no
+
+== Setup Network Access From Factory Reset (Over Serial) ==
+en
+conf t
+enable password 0 abcd1234
+enable secret secret1234
+line vty 0 15
+password 0 abcd1234
+exit
+interface vlan 1
+ip address 10.42.43.253 255.255.255.0
+no shutdown
+exit
