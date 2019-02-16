@@ -100,6 +100,73 @@
   * Disable LM hash storage, NTLM v2 and refuse LM and NTLM
 * Windows Server Backup
 
+### Playbook
+Link to the github: https://github.com/berke1337
+Checklist for hardening Windows 2008 Server: https://www.utsa.edu/oit/ImagesAndPDF/PDF2/server_hardening_checklist_win_2008r2.pdf
+
+
+Steps to harden the system:
+
+Sign in and change the admin VM password
+Send the ctrl+alt+delete and reset password to new password
+Turn on the firewall (two ways)
+Go to firewall settings and turn it on from there
+Method a may not work due to group policy access permissions. If so, use an admin command prompt and run
+Type netsh advfirewall set allprofiles state on. [1] to turn on the firewall
+Type netsh advfirewall show allprofiles to show the firewall status
+Start installing and running updates on the machine -> may need to restart the machine so want to do this as early as possible so as to minimize service interruptions
+If updates need to wait then apply specific patches to cover areas 
+Run password changing script 
+[TODO] also see if you can write a script to de-escalate privileges (remove admin privileges from  every account except Admin cred then manually confirm the rest of the privileges, also remove all guest account from the device)
+Submit password changes in password change form 
+Go through programs installed on the computer and remove/isolate the programs and disable them from being run 
+Start changing firewall rules
+Still need to determine exactly which ports need to stay open for both inbound and outbound traffic
+Netstat -ab 
+Netstat –an –b | find /I “’Listening”
+IP address in normally given so can run NMAP scan
+Follow steps to redirect UDP traffic from dynamic ports to port 135 
+Follow security setting steps on the Hardening checklist
+Add all the devices to the active directory and give all users access through 
+
+For script we have:
+
+# short url for this file: bash <(curl -sL https://goo.gl/DyNqxK)
+# alt link https://t0b.pw/chpasswd.sh
+
+
+http://techgenix.com/domain-controllers-required-ports/
+https://blogs.msmvps.com/acefekay/2011/11/01/active-directory-firewall-ports-let-s-try-to-make-this-simple/
+
+https://support.microsoft.com/en-us/help/224196/restricting-active-directory-rpc-traffic-to-a-specific-port
+
+
+https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd772723(v=ws.10)
+
+
+Patch for ms08-067:
+https://docs.microsoft.com/en-us/security-updates/securitybulletins/2008/ms08-067
+
+
+
+Check what ports are open:
+
+Netstat -ab 
+Netstat –an –b | find /I “’Listening”
+         
+
+
+Hardening steps:
+https://www.utsa.edu/oit/ImagesAndPDF/PDF2/server_hardening_checklist_win_2008r2.pdf
+
+
+
+Change user pwd via command line
+admin cmd
+net user  -> gets you all users
+net user USERNAME NEWPASS
+
+
 ### Links:
 * [O'Reilly Books](http://proquest.safaribooksonline.com/); must be in Berkeley IP zone
 * [Windows 2008 Checklist](https://utsacloud-public.sharepoint.com/Pages/Security/PDF/Server_Hardening_Checklist_Win_2008R2.pdf) from UT Austin
